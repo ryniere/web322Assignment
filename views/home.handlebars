@@ -1,0 +1,37 @@
+
+
+
+<section>
+  <div class="banner">
+    <img src="images/valentinesBanner.png" height="609" width="3000">
+  </div>
+</section>
+
+<section>
+  <h2>Categories</h2>
+  <div class="row">
+    {{#each categories}}
+    <div class="column" onclick="location.href='/productsList?category={{this.title}}'">
+      <h4>{{this.title}}</h4>
+      <div>
+        <img src={{this.image}} height="150" width="150">
+      </div>
+    </div>
+    {{/each}}
+  </div>
+</section>
+
+<section>
+  <h2>Best Sellers</h2>
+  <div class="row">
+    {{#each bestSellerProducts}}
+    <div class="column">
+      <h4>{{this.title}}</h4>
+      <div>
+        <img src={{this.image}} height="150" width="150">
+      </div>
+      <h6>${{this.price}}</h6>
+    </div>
+    {{/each}}
+  </div>
+</section>

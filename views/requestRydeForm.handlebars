@@ -1,0 +1,27 @@
+<!-- Will only show if the errors array exists-->
+{{#each errors}}
+
+    <div >{{this}}</div>
+{{/each}}
+
+
+<!--This will only show if the successMessage was injected into the view -->
+<div>{{successMessage}}</div><br>
+    <form action="/submitRequestRydeForm" method="POST">
+
+        <label for="fromAddress">From</label>
+        <input type="text" id="fromAddress" name="fromAddress"><br><br>
+
+        <label for="toAddress">To</label>
+        <input type="text" id="toAddress" name="toAddress"> <br><br>
+
+        <label for="distance">Distance (KM)</label>
+        <input type="number" step="0.01" min="0" id="distance" name="distance"> <br><br>
+
+        <img src="images/rydeShare.jpg" width="300" height="151"> <br><br>
+
+        <input type="submit" value="Find MY RYDE">
+
+    </form>
+
+</section>
