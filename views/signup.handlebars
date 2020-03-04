@@ -1,0 +1,25 @@
+<div id="modalSignup" >
+            <form class="modal-content animate" action="/submitRequesSignupForm" method="post">
+
+                <div class="container">
+
+                    <label for="name"><b>Your Name</b></label>
+                    <input type="text" placeholder="Enter Your Name" name="name" >
+                    <div class="errorMessage">{{errorMessages.nameMandatory}}</div>
+
+                    <label for="email"><b>Email</b></label>
+                    <input type="text" placeholder="Enter Email" name="email" >
+                    <div class="errorMessage">{{errorMessages.emailMandatory}}</div>
+
+                    <label for="password"><b>Password</b></label>
+                    <input type="password" placeholder="Enter Password" name="password" >
+                    <div class="errorMessage">{{errorMessages.passwordMandatory}}</div>
+
+                    <label for="password"><b>Password again</b></label>
+                    <input type="password" placeholder="Enter Password" name="passwordAgain" >
+                    <div class="errorMessage">{{errorMessages.passwordAgainMandatory}}</div>
+
+                    <button type="submit">Create your Amazon account</button>
+                </div>
+            </form>
+        </div>

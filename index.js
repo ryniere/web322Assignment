@@ -1,5 +1,5 @@
 const express = require("express");
-const  exphbs  = require('express-handlebars');
+const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
 
 
@@ -12,6 +12,8 @@ app.set('view engine', 'handlebars');
 const categoryModel = require("./model/category");
 const productModel = require("./model/product");
 
+const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const passwRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
 
 //body parser middleware
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -21,101 +23,150 @@ app.use(express.static("public"));
 
 //define your routes for the exam here
 
-app.get("/",(req,res)=>{
-    res.render("home",{
+app.get("/", (req, res) => {
+    res.render("home", {
         title: "Home",
         categories: categoryModel.getAllCategories(),
-        bestSellerProducts:  productModel.getBestSellerProducts()
-})
+        bestSellerProducts: productModel.getBestSellerProducts()
+    })
 });
 
-app.get("/login",(req,res)=>{
-    res.render("login",{
+app.get("/login", (req, res) => {
+    res.render("login", {
         title: "Login",
-})
+    })
 
 });
 
-app.get("/signup",(req,res)=>{
-    res.render("signup",{
+app.get("/signup", (req, res) => {
+    res.render("signup", {
         title: "Signup",
-})
+    })
 
 });
 
-app.get("/products",(req,res)=>{
+app.get("/products", (req, res) => {
 
 
-    res.render("productsList",{
+    res.render("productsList", {
         title: "productsList",
         category: 'All Products',
         products: productModel.getAllProducts()
-})
+    })
 });
 
-app.get("/productsList",(req,res)=>{
+app.get("/productsList", (req, res) => {
 
-    const {category} = req.query;
+    const { category } = req.query;
 
-    res.render("productsList",{
+    res.render("productsList", {
         title: "productsList",
         category: category,
         products: productModel.getProductsByCategory(category)
-})
+    })
+});
+
+
+app.post("/submitRequestLoginForm", (req, res) => {
+
+    const errorMessages = {};
+
+    let hasError = false;
+    let userEmail = "";
+
+    //validation
+    if (req.body.email == "") {
+        userEmail = req.body.email;
+        hasError = true;
+        errorMessages.emailMandatory = 'You must enter the email';
+    }
+
+    if (req.body.password == "") {
+        hasError = true;
+        errorMessages.passwordMandatory = 'You must enter the password';
+    }
+
+    if (hasError) {
+
+        res.render("login", {
+            title: "Login",
+            errorMessages
+        })
+
+    } else {
+        res.render('home', {
+            title: "Home",
+            categories: categoryModel.getAllCategories(),
+            bestSellerProducts: productModel.getBestSellerProducts(),
+            errorMessages,
+            userEmail
+        });
+    }
+
 });
 
 //Handle the post data
-app.post("/submitRequestRydeForm",(req,res)=>{
+app.post("/submitRequesSignupForm", (req, res) => {
 
-    const errorMessages = [];
+    const errorMessages = {};
+
+    let hasError = false;
+    let userEmail = "";
 
     //validation
-    if(req.body.fromAddress=="")
-    {
-            errorMessages.push("You must enter the address where the ryde will start");
+    if (req.body.name == "") {
+        hasError = true;
+        errorMessages.nameMandatory = 'You must enter your name';
     }
 
-    if(req.body.toAddress=="")
-    {
-            errorMessages.push("You must enter the address where the ryde will end");
+    if (req.body.email == "") {
+        userEmail = req.body.email;
+        hasError = true;
+        errorMessages.emailMandatory = 'You must enter the email';
+
+    } else if(!emailRegex.test(req.body.email)) {
+        hasError = true;
+        errorMessages.emailMandatory = 'You must enter a valid email';
     }
 
-    if(req.body.distance=="")
-    {
-            errorMessages.push("You must enter the distance");
+    if (req.body.password == "") {
+        hasError = true;
+        errorMessages.passwordMandatory = 'You must enter the password';
+    } else if(!passwRegex.test(req.body.password)) {
+        hasError = true;
+        errorMessages.passwordMandatory = 'The password must be between 6 to 20 characters which contain at least one numeric digit, one uppercase and one lowercase letter';
     }
 
-    //If the user does not enter all the information
-    if(errorMessages.length == 0 )
-    {
-        
-            //descturing
-            const {fromAddress, toAddress, distance} = req.body;
-            const price = (BASE_FARE + (Number(distance) * PRICE_PER_KM) + SERVICE_FEE);
-
-            const totalPrice = (price >= MINIMUN_FARE_CHARGE ? price : MINIMUN_FARE_CHARGE).toFixed(2);
-
-            res.render("confirmationPage",{
-                totalPrice, 
-                fromAddress, 
-                toAddress,
-                distance
-            });
+    if (req.body.passwordAgain == "") {
+        hasError = true;
+        errorMessages.passwordAgainMandatory = 'You must confirm the password';
+    } else if(!passwRegex.test(req.body.passwordAgain)) {
+        hasError = true;
+        errorMessages.passwordAgainMandatory = 'The password must be between 6 to 20 characters which contain at least one numeric digit, one uppercase and one lowercase letter';
     }
-    //If the user enters all the data and submit the form
-    else
-    {
-        res.render("requestRydeForm",{
-            errors : errorMessages
+
+    if (hasError) {
+
+        res.render("signup", {
+            title: "Signup",
+            errorMessages
+        })
+
+    } else {
+        res.render('home', {
+            title: "Home",
+            categories: categoryModel.getAllCategories(),
+            bestSellerProducts: productModel.getBestSellerProducts(),
+            errorMessages,
+            userEmail
         });
-            
     }
 
 });
 
 
-const PORT =process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 //This creates an Express Web Server that listens to HTTP Reuqest on port 3000
-app.listen(PORT,()=>{
+app.listen(PORT, () => {
     console.log(`Web Server Started`);
 });

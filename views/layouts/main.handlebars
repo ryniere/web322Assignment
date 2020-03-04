@@ -16,76 +16,13 @@
             <ul >
                 <li><a href="/">Home</a></li>
                 <li><a href="/products">Products</a></li> 
-                <li><button onclick="document.getElementById('modalSignup').style.display='block'"
-                        style="width:auto;">Signup</button></li>
-                <li><button onclick="document.getElementById('modalLogin').style.display='block'"
-                        style="width:auto;">Login</button></li>
+                <li><a href="/login">Login</a></li>
+                <li><a href="/signup">Signup</a></li>
             </ul>
         </nav>
     </header>
     <main>
         {{{body}}}
-
-        <div id="modalLogin" class="modal">
-            <form class="modal-content animate" action="/action_page.php" method="post">
-                <div class="imgcontainer">
-                    <span onclick="document.getElementById('modalLogin').style.display='none'" class="close"
-                        title="Close Modal">&times;</span>
-                    <img src="images/amazon-logo-transparent.png" height="90" width="300" alt="Avatar">
-                </div>
-
-                <div class="container">
-                    <label for="uemail"><b>Email</b></label>
-                    <input type="text" placeholder="Enter Username" name="uemail" required>
-
-                    <label for="psw"><b>Password</b></label>
-                    <input type="password" placeholder="Enter Password" name="psw" required>
-
-                    <button type="submit">Login</button>
-                    <label>
-                        <input type="checkbox" checked="checked" name="remember"> Remember me
-                    </label>
-                </div>
-
-                <div class="container" style="background-color:#f1f1f1">
-                    <button type="button" onclick="document.getElementById('modalLogin').style.display='none'"
-                        class="cancelbtn">Cancel</button>
-                    <span class="psw">Forgot <a href="#">password?</a></span>
-                </div>
-            </form>
-        </div>
-        <div id="modalSignup" class="modal">
-            <form class="modal-content animate" action="/action_page.php" method="post">
-                <div class="imgcontainer">
-                    <span onclick="document.getElementById('modalSignup').style.display='none'" class="close"
-                        title="Close Modal">&times;</span>
-                    <img src="images/amazon-logo-transparent.png" height="90" width="300" alt="Avatar">
-                </div>
-
-                <div class="container">
-
-                    <label for="uname"><b>Your Name</b></label>
-                    <input type="text" placeholder="Enter Your Name" name="uname" required>
-
-                    <label for="uemail"><b>Email</b></label>
-                    <input type="text" placeholder="Enter Email" name="uemail" required>
-
-                    <label for="psw"><b>Password</b></label>
-                    <input type="password" placeholder="Enter Password" name="psw" required>
-
-                    <label for="psw"><b>Password again</b></label>
-                    <input type="password" placeholder="Enter Password" name="pswagain" required>
-
-                    <button type="submit">Create your Amazon account</button>
-                </div>
-
-                <div class="container" style="background-color:#f1f1f1">
-                    <button type="button" onclick="document.getElementById('modalSignup').style.display='none'"
-                        class="cancelbtn">Cancel</button>
-                    <span class="psw">Forgot <a href="#">password?</a></span>
-                </div>
-            </form>
-        </div>
 
     </main>
     <footer>
@@ -100,6 +37,10 @@
         // Get the modal
         const modal = document.getElementById('modalLogin');
         const modalSignup = document.getElementById('modalSignup');
+
+
+        console.log(`ryniere: ${displayModal}`);
+
         // When the user clicks anywhere outside of the modal, close it
         window.onclick = function (event) {
             if (event.target == modal || event.target == modalSignup) {

@@ -127,6 +127,12 @@ span.psw {
   padding-top: 16px;
 }
 
+.errorMessage {
+  color: red;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
 /* The Modal (background) */
 .modal {
   display: none; /* Hidden by default */
@@ -167,7 +173,7 @@ span.psw {
 }
 
 /* Add Zoom Animation */
-.animate {
+/* .animate {
   -webkit-animation: animatezoom 0.6s;
   animation: animatezoom 0.6s
 }
@@ -180,7 +186,7 @@ span.psw {
 @keyframes animatezoom {
   from {transform: scale(0)} 
   to {transform: scale(1)}
-}
+} */
 
 /* Change styles for span and cancel button on extra small screens */
 @media screen and (max-width: 300px) {
