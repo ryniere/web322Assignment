@@ -1,6 +1,9 @@
 const express = require("express");
 const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
+const sgMail = require('@sendgrid/mail');
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 
 const app = express();
@@ -106,7 +109,7 @@ app.post("/submitRequestLoginForm", (req, res) => {
 });
 
 //Handle the post data
-app.post("/submitRequesSignupForm", (req, res) => {
+app.post("/submitRequesSignupForm", async(req, res) => {
 
     const errorMessages = {};
 
@@ -120,13 +123,14 @@ app.post("/submitRequesSignupForm", (req, res) => {
     }
 
     if (req.body.email == "") {
-        userEmail = req.body.email;
         hasError = true;
         errorMessages.emailMandatory = 'You must enter the email';
 
     } else if(!emailRegex.test(req.body.email)) {
         hasError = true;
         errorMessages.emailMandatory = 'You must enter a valid email';
+    } else {
+        userEmail = req.body.email;
     }
 
     if (req.body.password == "") {
@@ -153,6 +157,17 @@ app.post("/submitRequesSignupForm", (req, res) => {
         })
 
     } else {
+
+        console.log(userEmail)
+        const msg = {
+            to: userEmail,
+            from: 'ryniere16@gmail.com',
+            subject: 'Welcome',
+            text: 'Welcome Email',
+            html: '<strong>Welcome Email</strong>',
+          };
+        sgMail.send(msg);
+
         res.render('home', {
             title: "Home",
             categories: categoryModel.getAllCategories(),

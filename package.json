@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/ryniere/web322Assignment1#readme",
   "dependencies": {
+    "@sendgrid/mail": "^6.5.3",
     "express": "^4.17.1",
     "express-handlebars": "^3.1.0"
   }
