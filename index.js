@@ -79,9 +79,10 @@ app.post("/submitRequestLoginForm", (req, res) => {
 
     //validation
     if (req.body.email == "") {
-        userEmail = req.body.email;
         hasError = true;
         errorMessages.emailMandatory = 'You must enter the email';
+    } else {
+        userEmail = req.body.email;
     }
 
     if (req.body.password == "") {
@@ -97,11 +98,8 @@ app.post("/submitRequestLoginForm", (req, res) => {
         })
 
     } else {
-        res.render('home', {
-            title: "Home",
-            categories: categoryModel.getAllCategories(),
-            bestSellerProducts: productModel.getBestSellerProducts(),
-            errorMessages,
+        res.render('account', {
+            title: "Account",
             userEmail
         });
     }
@@ -109,12 +107,14 @@ app.post("/submitRequestLoginForm", (req, res) => {
 });
 
 //Handle the post data
-app.post("/submitRequesSignupForm", async(req, res) => {
+app.post("/submitRequesSignupForm", async (req, res) => {
 
     const errorMessages = {};
 
     let hasError = false;
-    let userEmail = "";
+    let userEmail = req.body.email;
+    let firstName = req.body.name;
+    let lastName = req.body.lastName;
 
     //validation
     if (req.body.name == "") {
@@ -126,7 +126,7 @@ app.post("/submitRequesSignupForm", async(req, res) => {
         hasError = true;
         errorMessages.emailMandatory = 'You must enter the email';
 
-    } else if(!emailRegex.test(req.body.email)) {
+    } else if (!emailRegex.test(req.body.email)) {
         hasError = true;
         errorMessages.emailMandatory = 'You must enter a valid email';
     } else {
@@ -136,7 +136,7 @@ app.post("/submitRequesSignupForm", async(req, res) => {
     if (req.body.password == "") {
         hasError = true;
         errorMessages.passwordMandatory = 'You must enter the password';
-    } else if(!passwRegex.test(req.body.password)) {
+    } else if (!passwRegex.test(req.body.password)) {
         hasError = true;
         errorMessages.passwordMandatory = 'The password must be between 6 to 20 characters which contain at least one numeric digit, one uppercase and one lowercase letter';
     }
@@ -144,7 +144,7 @@ app.post("/submitRequesSignupForm", async(req, res) => {
     if (req.body.passwordAgain == "") {
         hasError = true;
         errorMessages.passwordAgainMandatory = 'You must confirm the password';
-    } else if(!passwRegex.test(req.body.passwordAgain)) {
+    } else if (!passwRegex.test(req.body.passwordAgain)) {
         hasError = true;
         errorMessages.passwordAgainMandatory = 'The password must be between 6 to 20 characters which contain at least one numeric digit, one uppercase and one lowercase letter';
     }
@@ -158,22 +158,20 @@ app.post("/submitRequesSignupForm", async(req, res) => {
 
     } else {
 
-        console.log(userEmail)
         const msg = {
             to: userEmail,
             from: 'ryniere16@gmail.com',
-            subject: 'Welcome',
-            text: 'Welcome Email',
-            html: '<strong>Welcome Email</strong>',
-          };
+            subject: `Welcome ${firstName}!`,
+            text: `Welcome ${firstName} ${lastName}! We are very excited you signed up!`,
+            html: `<p>Welcome ${firstName} ${lastName}! We are very excited you signed up!</p>`
+        };
         sgMail.send(msg);
 
-        res.render('home', {
-            title: "Home",
-            categories: categoryModel.getAllCategories(),
-            bestSellerProducts: productModel.getBestSellerProducts(),
-            errorMessages,
-            userEmail
+        res.render('account', {
+            title: "Account",
+            userEmail,
+            firstName,
+            lastName
         });
     }
 
