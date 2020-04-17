@@ -18,7 +18,7 @@ app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
 
 const categoryModel = require("./model/category");
-const productModel = require("./model/product");
+const productModel = require("./model/Product");
 
 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const passwRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
