@@ -2,6 +2,11 @@ const express = require("express");
 const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
 const sgMail = require('@sendgrid/mail');
+const mongoose = require('mongoose');
+
+
+//This loads all our environment variables from the keys.env
+require("dotenv").config({path:'./config/keys.env'});
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -178,7 +183,14 @@ app.post("/submitRequesSignupForm", async (req, res) => {
 });
 
 
-const PORT = process.env.PORT || 3000;
+mongoose.connect(process.env.MONGO_DB_CONNECTION_STRING, {useNewUrlParser: true, useUnifiedTopology: true})
+.then(()=>{
+    console.log(`Connected to MongoDB Database`);
+})
+.catch(err=>console.log(`Error occured when connecting to database ${err}`));
+
+
+const PORT = process.env.PORT;
 //This creates an Express Web Server that listens to HTTP Reuqest on port 3000
 app.listen(PORT, () => {
     console.log(`Web Server Started`);
