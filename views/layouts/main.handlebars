@@ -14,11 +14,17 @@
     <header>
         <img src="images/amazon-logo-transparent.png" height="90" width="300">
         <nav class="right">
-            <ul >
+            <ul>
                 <li><a href="/">Home</a></li>
-                <li><a href="/products">Products</a></li> 
-                <li><a href="/login">Login</a></li>
-                <li><a href="/signup">Signup</a></li>
+                <li><a href="/products">Products</a></li>
+
+                {{#if user}}
+                <li><a href="/user/profile">{{user.firstName}} {{user.lastName}} Dashboard</a></li>
+                <li><a href="/user/logout">logout </a></li>
+                {{else}}
+                <li><a href="/user/login">Login</a></li>
+                <li><a href="/user/signup">Signup </a></li>
+                {{/if}}
             </ul>
         </nav>
     </header>
