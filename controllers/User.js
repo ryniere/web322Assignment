@@ -6,6 +6,8 @@ const path = require("path");
 const bcrypt = require("bcryptjs");
 const sgMail = require('@sendgrid/mail');
 
+const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const passwRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
 
 //Route to direct use to Registration form
 router.get("/signup",(req,res)=>
@@ -40,16 +42,24 @@ router.post("/signup",(req,res)=>
                 hasError = true;
                 errorMessages.lastNameMandatory = 'You must enter your last name';
             } 
-        
+
             if (email == "") {
                 hasError = true;
                 errorMessages.emailMandatory = 'You must enter the email';
+
+            } else if (!emailRegex.test(email)) {
+                hasError = true;
+                errorMessages.emailMandatory = 'You must enter a valid email';
             } 
-        
+
             if (password == "") {
                 hasError = true;
                 errorMessages.passwordMandatory = 'You must enter the password';
+            } else if (!passwRegex.test(password)) {
+                hasError = true;
+                errorMessages.passwordMandatory = 'The password must be between 6 to 20 characters which contain at least one numeric digit, one uppercase and one lowercase letter';
             }
+        
         
             if (passwordAgain == "") {
                 hasError = true;

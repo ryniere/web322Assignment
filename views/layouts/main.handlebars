@@ -16,9 +16,12 @@
         <nav class="right">
             <ul>
                 <li><a href="/">Home</a></li>
-                <li><a href="/products">Products</a></li>
+                <li><a href="/product/products">Products</a></li>
 
                 {{#if user}}
+                {{#if user.isAdmin}}
+                <li><a href="/product/inventory"><i class="fa fa-user"></i><span class="hide_part">Admin</span></a></li>
+                {{/if}}
                 <li><a href="/user/profile">{{user.firstName}} {{user.lastName}} Dashboard</a></li>
                 <li><a href="/user/logout">logout </a></li>
                 {{else}}
