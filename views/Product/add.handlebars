@@ -1,0 +1,20 @@
+<h2>Add New Product</h2>
+    
+    <!-- url-encoded data form-->
+    <form method="POST" action="/product/add" enctype="multipart/form-data">
+
+        <label>Title</label>
+        <input type="text" name="title" id="title"> <br><br>
+
+        <label>Price</label>
+        <input type="number" name="price" id="price"> <br><br>
+
+        <label>Category</label>
+        <input type="text" name="category" id="category"> <br><br>
+        
+        <label>File Upload</label>
+        <input type="file" name="picture" id="picture"> <br><br>
+
+        <input type="submit" value="Add Product">
+
+    </form>

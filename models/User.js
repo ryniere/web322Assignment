@@ -33,6 +33,11 @@ const bcrypt = require("bcryptjs");
     {
         type:String
     },
+    isAdmin:
+    {
+        type:Boolean,
+        default:false
+    },
 
     dateCreated:
     {

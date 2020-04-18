@@ -10,14 +10,12 @@ const session = require('express-session');
 //This loads all our environment variables from the keys.env
 require("dotenv").config({path:'./config/keys.env'});
 
-const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const passwRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
-
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 //import your router objects
 const userRoutes = require("./controllers/User");
 const generalRoutes = require("./controllers/General");
+const productsRoutes = require("./controllers/Product");
 
 const app = express();
 
@@ -73,6 +71,7 @@ app.use((req,res,next)=>{
 //MAPs EXPRESS TO ALL OUR  ROUTER OBJECTS
 app.use("/",generalRoutes);
 app.use("/user",userRoutes);
+app.use("/product",productsRoutes);
 app.use("/",(req,res)=>{
     res.render("General/404");
 });
