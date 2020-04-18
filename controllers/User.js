@@ -17,52 +17,116 @@ router.get("/signup",(req,res)=>
 router.post("/signup",(req,res)=>
 { 
 
-    const { name, lastName, email, password } = req.body;
+    const { name, lastName, email, password, passwordAgain } = req.body;
 
-    const newUser =
-    {
-        firstName: name,
-        lastName: lastName,
-        email: email,
-        password: password
-    }
+    const errorMessages = {};
 
-    const user = new userModel(newUser);
-    user.save()
+    let hasError = false;
+
+    //validation
+
+    userModel.findOne({email:req.body.email})
     .then((user)=>{
 
-                const msg = {
-            to: email,
-            from: 'ryniere16@gmail.com',
-            subject: `Welcome ${name}!`,
-            text: `Welcome ${name} ${lastName}! We are very excited you signed up!`,
-            html: `<p>Welcome ${name} ${lastName}! We are very excited you signed up!</p>`
-        };
-        sgMail.send(msg);
+        //there was no matching email
+        if(user==null)
+        {
+            if (name == "") {
+                hasError = true;
+                errorMessages.nameMandatory = 'You must enter your first name';
+            } 
+        
+            if (lastName == "") {
+                hasError = true;
+                errorMessages.lastNameMandatory = 'You must enter your last name';
+            } 
+        
+            if (email == "") {
+                hasError = true;
+                errorMessages.emailMandatory = 'You must enter the email';
+            } 
+        
+            if (password == "") {
+                hasError = true;
+                errorMessages.passwordMandatory = 'You must enter the password';
+            }
+        
+            if (passwordAgain == "") {
+                hasError = true;
+                errorMessages.passwordAgainMandatory = 'You must retype the password';
+            }
+        
+            if (password != passwordAgain) {
+                hasError = true;
+                errorMessages.passwordAgainMandatory = 'Passwords does not match';
+            } 
+        
+            if (hasError) {
+        
+                res.render("User/signup", {
+                    errorMessages
+                });
+            } else {
+                const newUser =
+                {
+                    firstName: name,
+                    lastName: lastName,
+                    email: email,
+                    password: password
+                }
+            
+                const user = new userModel(newUser);
+                user.save()
+                .then((user)=>{
+            
+                            const msg = {
+                        to: email,
+                        from: 'ryniere16@gmail.com',
+                        subject: `Welcome ${name}!`,
+                        text: `Welcome ${name} ${lastName}! We are very excited you signed up!`,
+                        html: `<p>Welcome ${name} ${lastName}! We are very excited you signed up!</p>`
+                    };
+                    sgMail.send(msg);
+            
+            
+                    req.session.user= user;
+                    res.redirect(`/user/profile/`)
+                    // req.files.profilePic.name = `pro_pic_${user._id}${path.parse(req.files.profilePic.name).ext}`;
+            
+                    // req.files.profilePic.mv(`public/uploads/${req.files.profilePic.name}`)
+                    // .then(()=>{
+            
+            
+                    //     userModel.updateOne({_id:user._id},{
+                    //         profilePic: req.files.profilePic.name
+                    //     })
+                    //     .then(()=>{
+                    //         res.redirect(`/user/profile/${user._id}`)
+                    //     })
+            
+                    // })
+                  
+                  
+                   
+                })
+                .catch(err=>console.log(`Error while inserting into the data ${err}`));
+            }
+        }
+        //There is a matching email
+        else
+        {
+            hasError = true;
+            errorMessages.emailMandatory = 'There is another user registered with this email';
+            res.render("User/signup", {
+                errorMessages
+            });
+        }
 
 
-        req.session.user= user;
-        res.redirect(`/user/profile/`)
-        // req.files.profilePic.name = `pro_pic_${user._id}${path.parse(req.files.profilePic.name).ext}`;
-
-        // req.files.profilePic.mv(`public/uploads/${req.files.profilePic.name}`)
-        // .then(()=>{
-
-
-        //     userModel.updateOne({_id:user._id},{
-        //         profilePic: req.files.profilePic.name
-        //     })
-        //     .then(()=>{
-        //         res.redirect(`/user/profile/${user._id}`)
-        //     })
-
-        // })
-      
-      
-       
     })
-    .catch(err=>console.log(`Error while inserting into the data ${err}`));
- 
+    .catch(err=>console.log(`Error ${err}`));
+
+    
 });
 
 //Route to direct user to the login form
@@ -137,7 +201,6 @@ router.post("/login",(req,res)=>
     .catch(err=>console.log(`Error ${err}`));
 
 
-    //res.redirect("/user/profile/")
 });
 
 

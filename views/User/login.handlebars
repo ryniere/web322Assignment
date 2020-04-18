@@ -1,15 +1,21 @@
-<div id="modalLogin" >
+<div id="modalLogin">
     <form class="modal-content animate" action="/user/login" method="post">
+
 
         <div class="container">
             <label for="uemail"><b>Email</b></label>
             <input type="text" placeholder="Enter Username" name="email">
-            <div class="errorMessage">{{errorMessages.emailMandatory}}</div>
+
 
             <label for="psw"><b>Password</b></label>
             <input type="password" placeholder="Enter Password" name="password">
-            <div class="errorMessage">{{errorMessages.passwordMandatory}}</div>
-            
+
+            {{#each errors}}
+            <div class="errorMessage">
+                {{this}}
+            </div>
+            {{/each}}
+
             <button type="submit">Login</button>
             <label>
                 <input type="checkbox" checked="checked" name="remember"> Remember me
