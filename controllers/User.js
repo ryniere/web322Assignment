@@ -4,6 +4,7 @@ const router = express.Router();
 const userModel = require("../models/User");
 const path = require("path");
 const bcrypt = require("bcryptjs");
+const sgMail = require('@sendgrid/mail');
 
 
 //Route to direct use to Registration form
@@ -16,19 +17,32 @@ router.get("/signup",(req,res)=>
 router.post("/signup",(req,res)=>
 { 
 
-    const newUser = 
+    const { name, lastName, email, password } = req.body;
+
+    const newUser =
     {
-        firstName:req.body.name,
-        lastName:req.body.lastName,
-        email:req.body.email,
-        password:req.body.password
+        firstName: name,
+        lastName: lastName,
+        email: email,
+        password: password
     }
 
     const user = new userModel(newUser);
     user.save()
     .then((user)=>{
 
-        res.redirect(`/user/profile/${user._id}`)
+                const msg = {
+            to: email,
+            from: 'ryniere16@gmail.com',
+            subject: `Welcome ${name}!`,
+            text: `Welcome ${name} ${lastName}! We are very excited you signed up!`,
+            html: `<p>Welcome ${name} ${lastName}! We are very excited you signed up!</p>`
+        };
+        sgMail.send(msg);
+
+
+        req.session.user= user;
+        res.redirect(`/user/profile/`)
         // req.files.profilePic.name = `pro_pic_${user._id}${path.parse(req.files.profilePic.name).ext}`;
 
         // req.files.profilePic.mv(`public/uploads/${req.files.profilePic.name}`)
