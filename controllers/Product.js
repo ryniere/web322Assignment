@@ -43,6 +43,45 @@ router.get("/inventory/",(req,res)=>
 
 });
 
+router.get("/products/",(req,res)=>
+{
+    //pull from the database , get the results that was returned and then inject that results into
+    //the taskDashboard
+
+
+    productModel.find()
+    .then((products)=>{
+
+
+        //Filter out the information that you want from the array of documents that was returned into
+        //a new array
+
+        //Array 300 documents meaning that the array has 300 elements 
+
+  
+        const filteredProduct =   products.map(product=>{
+
+                return {
+
+                    id: product._id,
+                    title:product.title,
+                    price :product.price,
+                    picture: product.picture,
+                    quantity :product.quantity,
+                    category : product.category,
+                    bestSeller : product.bestSeller
+                }
+        });
+
+        res.render("Product/productsList",{
+            data : filteredProduct
+        });
+
+    })
+    .catch(err=>console.log(`Error happened when pulling from the database :${err}`));
+
+});
+
 
 router.get("/productsList/",(req,res)=>
 {
