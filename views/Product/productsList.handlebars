@@ -2,11 +2,11 @@
 <section>
   <h2>{{category}}</h2>
   <div class="grid-container">
-    {{#each products}}
+    {{#each data}}
     <div class="grid-item">
       <h3>{{this.title}}</h3>
       <div>
-        <img src={{this.image}} height="150" width="150">
+        <img src="/uploads/{{this.picture}}" height="150" width="150">
       </div>
       <h6>${{this.price}}</h6>
     </div>

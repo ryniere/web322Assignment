@@ -43,6 +43,48 @@ router.get("/inventory/",(req,res)=>
 
 });
 
+
+router.get("/productsList/",(req,res)=>
+{
+    //pull from the database , get the results that was returned and then inject that results into
+    //the taskDashboard
+
+    const { category } = req.query
+
+    console.log(category)
+    productModel.find({category:category.toLocaleLowerCase()})
+    .then((products)=>{
+
+
+        //Filter out the information that you want from the array of documents that was returned into
+        //a new array
+
+        //Array 300 documents meaning that the array has 300 elements 
+
+  
+        const filteredProduct =   products.map(product=>{
+
+                return {
+
+                    id: product._id,
+                    title:product.title,
+                    price :product.price,
+                    picture: product.picture,
+                    quantity :product.quantity,
+                    category : product.category,
+                    bestSeller : product.bestSeller
+                }
+        });
+
+        res.render("Product/productsList",{
+            data : filteredProduct
+        });
+
+    })
+    .catch(err=>console.log(`Error happened when pulling from the database :${err}`));
+
+});
+
 //Route to direct use to Add Task form
 router.get("/add",(req,res)=>
 {
@@ -52,10 +94,14 @@ router.get("/add",(req,res)=>
 //Route to process user's request and data when the user submits the add task form
 router.post("/add",(req,res)=>
 {
+
+        const bestSeller = req.body.bestSeller === "true" ? true : false;
         const newProduct = {
             title : req.body.title,
             price : req.body.price,
+            description: req.body.description,
             quantity : req.body.quantity,
+            bestSeller : bestSeller,
             category : req.body.category.toLowerCase()
         }
 

@@ -1,6 +1,6 @@
 <section>
   <div class="banner">
-    <img src="images/valentinesBanner.png" height="609" width="3000">
+    <img src="/images/valentinesBanner.png" height="609" width="3000">
   </div>
 </section>
 
@@ -8,7 +8,7 @@
   <h2>Categories</h2>
   <div class="row">
     {{#each categories}}
-    <div class="card" style="width: 18rem;" onclick="location.href='/productsList?category={{this.title}}'">
+    <div class="card" style="width: 18rem;" onclick="location.href='product/productsList?category={{this.title}}'">
   <img src={{this.image}} class="card-img-top" alt="...">
   <div class="card-body">
     <h5 class="card-title">{{this.title}}</h5>
@@ -23,7 +23,7 @@
   <div class="row">
     {{#each bestSellerProducts}}
     <div class="card" style="width: 18rem;">
-  <img src={{this.image}} class="card-img-top" alt="...">
+  <img src="/uploads/{{this.picture}}" class="card-img-top" alt="...">
   <div class="card-body">
     <h5 class="card-title">{{this.title}}</h5>
     <p class="card-text">${{this.price}}</p>
